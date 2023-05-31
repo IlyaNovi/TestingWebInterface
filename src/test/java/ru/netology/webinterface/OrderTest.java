@@ -1,5 +1,3 @@
-package ru.netology.webinterface;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,13 +14,12 @@ public class OrderTest {
     private WebDriver driver;
 
     @BeforeAll
-    static void setUpAll() {
+    static void setDriver() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void setUp() {
-        //   driver = new ChromeDriver();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -32,23 +29,20 @@ public class OrderTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void setDown() {
         driver.quit();
         driver = null;
     }
 
     @Test
-    void shouldTestOrder() throws InterruptedException {
-        driver.get("http://localhost:9999/");
-        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Попов Василий");
-        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("89505689324");
-        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+    void shouldReturnSuccessPage() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Шумихина Евгения");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79046441684");
+        driver.findElement(By.cssSelector(".checkbox__box")).click();
         driver.findElement(By.cssSelector(".button__text")).click();
-        String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
         String actual = driver.findElement(By.cssSelector("[data-test-id='order-success']")).getText().trim();
+        String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
         assertEquals(expected, actual);
-
     }
+
 }
-
-
